@@ -4,7 +4,24 @@
 <body>
 <form method="post" action="http://localhost:8000">
 	<input type="text" name="testeo"/>
-	<textarea name="comandos" rows="25" cols="80">{"opcode": "forward", "p1": 100, "p2": 100}</textarea>
+<!--	<textarea name="comandos" rows="25" cols="80">{"opcode": "forward", "p1": 100, "p2": 100}</textarea> -->
+	<textarea name="commands" rows="25" cols="80">
+[
+{target: "robot",
+board: {device: "/dev/ttyUSB0"},
+id:0,
+command: "forward",
+args:[]
+},
+{target: "board",
+board: {device: "/dev/ttyUSB0"}
+},
+{target: "module",
+command: "sss",
+args: [1, 2]
+}
+	]
+	</textarea>
 	<input type="submit" value="Submit" />
 </form>
 </body>

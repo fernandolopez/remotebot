@@ -15,8 +15,9 @@ function send(message){
 	show_progress();
 	response.innerHTML = "";
 	request.open("POST", "/", false);
+	request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	try{
-		request.send(message.value);
+		request.send('commands=' + encodeURIComponent(commands.value));
 	} catch(e) {
 		hide_progress();
 		response.innerHTML = e;
@@ -57,9 +58,39 @@ function send(message){
 </head>
 <body>
 <div id="progress" class="hiddenprogress"><img src="progress.svg"/>http://www.bogotobogo.com/svg.html</div>
-<textarea id="message" rows="20" cols="80"></textarea>
+<textarea id="commands" name="commands" rows="20" cols="80">
+[
+	{
+		"target": "board",
+		"board": {"device": "/dev/ttyUSB0"},
+		"command": "__init__"	
+	},
+	{
+		"target": "robot",
+		"board": {"device": "/dev/ttyUSB0"},
+		"command": "__init__",
+		"id": 1
+	},
+	{
+		"target": "robot",
+		"board": {"device": "/dev/ttyUSB0"},
+		"id": 1,
+		"command": "forward",
+		"args": [50, 2]
+	},
+	{
+		"target": "board",
+		"board": {"device": "/dev/ttyUSB0"}
+	},
+	{
+		"target": "module",
+		"command": "sss",
+		"args": [1, 2]
+	}
+]
+</textarea>
 <br />
-<input type="button" value="Enviar" onclick="send(message)"/>
+<input type="button" value="Enviar" onclick="send(commands)"/>
 <div id="response"></div>
 </body>
 </html>
