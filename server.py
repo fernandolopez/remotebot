@@ -21,7 +21,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 		try:
 			f = open(self.defaultPage.lstrip('/'), 'r')
 			body = f.read()
-            f.close()
+			f.close()
 			self.send_response(200)
 		except IOError:
 			body = """<html><head><title>Error</title></head>
@@ -43,7 +43,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 			'CONTENT_TYPE':self.headers['Content-Type'],
 			})
 		result = dispatcher.execute(form)
-        
+		
 
 		self.send_response(200)
 		self.send_header("Content-type", "text/html")
