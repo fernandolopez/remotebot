@@ -1,7 +1,7 @@
-from robot import *
+#from robot import *
+from mock.robot import *
 import json
-import cgi
-import traceback
+from errors import ServerException
 
 __robot = {}
 __board = {}
@@ -14,18 +14,18 @@ def robot_execute(message):
         if boardid in __board and not robotid in __robot:
             __robot[robotid] = Robot(__board[boardid], message['id'])
     else:
-        getattr(__robot[robotid], message['command'])(*message['args'])
-    return "Ok"
+        return getattr(__robot[robotid], message['command'])(*message['args'])
+    return None
     
 def board_execute(message):
     device = message['board']['device']
     if message['command'] == '__init__' and not device in __board:
         __board[device] = Board(device)
-    return "board"
+    return None
     
 def module_execute(message):
     #print message
-    return "module"
+    return None
 
 
 __handler = {
@@ -35,19 +35,20 @@ __handler = {
 }
 
 def execute(form):
-    response = ""
+    returnList = []
     print form
     try:
         command = '\n'.join(form.getlist("commands"))
         cmdList = json.loads(command)
         for cmdObject in cmdList:
-            response += __handler[cmdObject["target"]](cmdObject)
-    except TypeError as e:
-        return "Server error: " + traceback.format_exc()
-    except ValueError as e:
-        return "Server error: " + traceback.format_exc()
-    except KeyError as e:
-        return "Server error: " + traceback.format_exc()
+            if not 'args' in cmdObject:
+                cmdObject['args'] = ()
+            returnList.append(__handler[cmdObject["target"]](cmdObject))
+    except (TypeError, ValueError, KeyError) as e:
+        raise ServerException(e)
     
-    return response
+    return json.dumps({
+        'type': 'returnvalues',
+        'values': returnList
+        })
     

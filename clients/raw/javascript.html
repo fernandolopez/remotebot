@@ -24,7 +24,7 @@ function send(message){
 		return;
 	}
 	hide_progress();
-	response.innerHTML = request.responseText;
+	response.innerHTML = request.responseText.replace(/\\n/g, '<br/>').replace(/\\"/g, '\"');
 }
 </script>
 <style>

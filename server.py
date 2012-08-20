@@ -5,36 +5,46 @@ from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 import cgi
 import json
 import dispatcher
+from errors import ServerException
 
 class RequestHandler(BaseHTTPRequestHandler):
 	defaultPage = "/clients/raw/javascript.html"
+	localAPK = "/clients/android/remotebot.apk"
 	def do_GET(self):
-		if (self.command != 'GET'): return
+		if (self.command != 'GET'):
+			return
 		#print(self.rfile.read())
 		print(self.path)
-		if self.path != self.defaultPage:
+		
+		if self.path == self.defaultPage:
+			mimetype = "text/html"
+		elif self.path == self.localAPK:
+			mimetype = "application/vnd.android.package-archive"
+		else:
 			self.send_response(302)
 			self.send_header("Location", self.defaultPage)
 			self.end_headers()
 			return
 			
 		try:
-			f = open(self.defaultPage.lstrip('/'), 'r')
+			f = open(self.path.lstrip('/'), 'r')
 			body = f.read()
 			f.close()
 			self.send_response(200)
 		except IOError:
 			body = """<html><head><title>Error</title></head>
 			<body>Error al leer el archivo {0}</body></html>
-			""".format(self.defaultPage)
-			self.send_response(503)
-
-		self.send_header("Content-type", "text/html")
+			""".format(self.path)
+			mimetype = "text/html"
+			self.send_response(500)
+		
+		self.send_header("Content-type", mimetype)
 		self.end_headers()			
 		self.wfile.write(str(body))
 	
 	def do_POST(self):
-		if (self.command != 'POST'): return
+		if (self.command != 'POST'):
+			return
 		#if (not self.rfile)): print(self.rfile.read())
 		form = cgi.FieldStorage(
 			fp=self.rfile, 
@@ -42,11 +52,14 @@ class RequestHandler(BaseHTTPRequestHandler):
 			environ={'REQUEST_METHOD':'POST',
 			'CONTENT_TYPE':self.headers['Content-Type'],
 			})
-		result = dispatcher.execute(form)
+		try:
+			result = dispatcher.execute(form)
+		except ServerException as e:
+			result = e.dumpJSON()
 		
 
 		self.send_response(200)
-		self.send_header("Content-type", "text/html")
+		self.send_header("Content-type", "application/json")
 		self.end_headers()
 		self.wfile.write(str(result))
 
