@@ -1,1 +1,1 @@
-export PYTHONPATH=$PWD/../duinobot
+export PYTHONPATH=$PWD/..

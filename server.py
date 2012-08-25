@@ -5,6 +5,7 @@ from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 import cgi
 import json
 import dispatcher
+import select
 from errors import ServerException
 
 class RequestHandler(BaseHTTPRequestHandler):
@@ -43,18 +44,21 @@ class RequestHandler(BaseHTTPRequestHandler):
 		self.wfile.write(str(body))
 	
 	def do_POST(self):
+		import StringIO
 		if (self.command != 'POST'):
 			return
-		#if (not self.rfile)): print(self.rfile.read())
+		#data = StringIO.StringIO(self.rfile.read(int(self.headers['Content-Length'])))
 		form = cgi.FieldStorage(
 			fp=self.rfile, 
 			headers=self.headers,
 			environ={'REQUEST_METHOD':'POST',
 			'CONTENT_TYPE':self.headers['Content-Type'],
 			})
+		#data.close()
 		try:
 			result = dispatcher.execute(form)
 		except ServerException as e:
+			print(e)
 			result = e.dumpJSON()
 		
 
@@ -67,4 +71,8 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 address = ('', 8000)
 httpd = HTTPServer(address, RequestHandler)
-httpd.serve_forever()
+try:
+	httpd.serve_forever()
+except (Exception, KeyboardInterrupt) as e:
+	print(e)
+	dispatcher.free()

@@ -1,7 +1,8 @@
-#from robot import *
-from mock.robot import *
+from duinobot import *
+#from mock.robot import *
 import json
 from errors import ServerException
+from serial.serialutil import SerialException
 
 __robot = {}
 __board = {}
@@ -44,11 +45,14 @@ def execute(form):
             if not 'args' in cmdObject:
                 cmdObject['args'] = ()
             returnList.append(__handler[cmdObject["target"]](cmdObject))
-    except (TypeError, ValueError, KeyError) as e:
+    except (TypeError, ValueError, KeyError, SerialException) as e:
         raise ServerException(e)
     
     return json.dumps({
         'type': 'returnvalues',
         'values': returnList
         })
-    
+
+def free():
+    for each in __board.values():
+        each.exit()
