@@ -66,6 +66,8 @@ class RequestHandler(BaseHTTPRequestHandler):
 		self.send_header("Content-type", "application/json")
 		self.end_headers()
 		self.wfile.write(str(result))
+		print "*" * 80
+		print result
 
 
 

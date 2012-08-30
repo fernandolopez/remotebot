@@ -1,5 +1,5 @@
-from duinobot import *
-#from mock.robot import *
+#from duinobot import *
+from mock.robot import *
 import json
 from errors import ServerException
 from serial.serialutil import SerialException
@@ -20,12 +20,19 @@ def robot_execute(message):
     
 def board_execute(message):
     device = message['board']['device']
-    if message['command'] == '__init__' and not device in __board:
-        __board[device] = Board(device)
+    if message['command'] == '__init__':
+        if not device in __board:
+            __board[device] = Board(device)
+    else:
+        return getattr(__board[device], message['command'])(*message['args'])
     return None
     
 def module_execute(message):
     #print message
+    if message['command'] == 'boards':
+        return boards(*message['args'])
+    elif message['command'] == 'joysticks':
+        return boards(*message['args'])
     return None
 
 
@@ -45,7 +52,7 @@ def execute(form):
             if not 'args' in cmdObject:
                 cmdObject['args'] = ()
             returnList.append(__handler[cmdObject["target"]](cmdObject))
-    except (TypeError, ValueError, KeyError, SerialException) as e:
+    except (TypeError, ValueError, KeyError, SerialException, NameError) as e:
         raise ServerException(e)
     
     return json.dumps({
