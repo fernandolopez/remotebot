@@ -44,7 +44,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 		self.wfile.write(str(body))
 	
 	def do_POST(self):
-		import StringIO
+		#import StringIO
 		if (self.command != 'POST'):
 			return
 		#data = StringIO.StringIO(self.rfile.read(int(self.headers['Content-Length'])))
@@ -61,11 +61,15 @@ class RequestHandler(BaseHTTPRequestHandler):
 			print(e)
 			result = e.dumpJSON()
 		
-
+		print("**************************************")
+		print(result)
+		print("**************************************")
+		result = str(result)
 		self.send_response(200)
-		self.send_header("Content-type", "application/json")
+		self.send_header("Content-Type", "application/json")
+		self.send_header("Content-Length", len(result))
 		self.end_headers()
-		self.wfile.write(str(result))
+		self.wfile.write(result)
 
 
 

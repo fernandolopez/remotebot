@@ -20,12 +20,14 @@ def robot_execute(message):
     
 def board_execute(message):
     device = message['board']['device']
+    print "A ver si conecta... " + device
     if message['command'] == '__init__' and not device in __board:
         __board[device] = Board(device)
     return None
     
 def module_execute(message):
-    #print message
+    if message['command'] == 'boards':
+            return boards()
     return None
 
 
