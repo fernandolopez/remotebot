@@ -19,15 +19,20 @@ def robot_execute(message):
     return None
     
 def board_execute(message):
-    device = message['board']['device']
-    print "A ver si conecta... " + device
-    if message['command'] == '__init__' and not device in __board:
-        __board[device] = Board(device)
+    device = message['board']['device'].strip()
+    if message['command'] == '__init__':
+        if not device in __board:
+            __board[device] = Board(device)
+    else:
+        return getattr(__board[device], message['command'])(*message['args'])
     return None
     
 def module_execute(message):
+    #print message
     if message['command'] == 'boards':
-            return boards()
+        return boards(*message['args'])
+    elif message['command'] == 'joysticks':
+        return joysticks(*message['args'])
     return None
 
 
@@ -47,7 +52,7 @@ def execute(form):
             if not 'args' in cmdObject:
                 cmdObject['args'] = ()
             returnList.append(__handler[cmdObject["target"]](cmdObject))
-    except (TypeError, ValueError, KeyError, SerialException) as e:
+    except (TypeError, ValueError, KeyError, SerialException, NameError) as e:
         raise ServerException(e)
     
     return json.dumps({

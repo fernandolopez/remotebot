@@ -61,20 +61,21 @@ class RequestHandler(BaseHTTPRequestHandler):
 			print(e)
 			result = e.dumpJSON()
 		
-		print("**************************************")
-		print(result)
-		print("**************************************")
+		#print("**************************************")
+		#print(result)
+		#print("**************************************")
 		result = str(result)
 		self.send_response(200)
-		self.send_header("Content-Type", "application/json")
+		self.send_header("Content-type", "application/json")
 		self.send_header("Content-Length", len(result))
 		self.end_headers()
 		self.wfile.write(result)
 
 
-
+import socket
 address = ('', 8000)
 httpd = HTTPServer(address, RequestHandler)
+httpd.socket.setsockopt(socket.SOL_TCP, socket.TCP_NODELAY, 0)
 try:
 	httpd.serve_forever()
 except (Exception, KeyboardInterrupt) as e:
