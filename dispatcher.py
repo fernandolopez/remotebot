@@ -1,5 +1,5 @@
-from duinobot import *
-#from mock.robot import *
+#from duinobot import *
+from mock.robot import *
 import json
 from errors import ServerException
 from serial.serialutil import SerialException

@@ -11,6 +11,9 @@ from errors import ServerException
 class RequestHandler(BaseHTTPRequestHandler):
 	defaultPage = "/clients/raw/javascript.html"
 	localAPK = "/clients/android/remotebot.apk"
+	# Disable logging DNS lookups
+	def address_string(self):
+		return str(self.client_address[0])
 	def do_GET(self):
 		if (self.command != 'GET'):
 			return
@@ -55,6 +58,8 @@ class RequestHandler(BaseHTTPRequestHandler):
 			'CONTENT_TYPE':self.headers['Content-Type'],
 			})
 		#data.close()
+		self.send_response(200)
+		self.send_header("Content-type", "application/json")
 		try:
 			result = dispatcher.execute(form)
 		except ServerException as e:
@@ -65,8 +70,8 @@ class RequestHandler(BaseHTTPRequestHandler):
 		#print(result)
 		#print("**************************************")
 		result = str(result)
-		self.send_response(200)
-		self.send_header("Content-type", "application/json")
+		#self.send_response(200)
+		#self.send_header("Content-type", "application/json")
 		self.send_header("Content-Length", len(result))
 		self.end_headers()
 		self.wfile.write(result)
