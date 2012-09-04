@@ -35,6 +35,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 			body = f.read()
 			f.close()
 			self.send_response(200)
+			self.send_header("Content-Length", len(body))
 		except IOError:
 			body = """<html><head><title>Error</title></head>
 			<body>Error al leer el archivo {0}</body></html>
@@ -47,40 +48,36 @@ class RequestHandler(BaseHTTPRequestHandler):
 		self.wfile.write(str(body))
 	
 	def do_POST(self):
-		#import StringIO
 		if (self.command != 'POST'):
 			return
-		#data = StringIO.StringIO(self.rfile.read(int(self.headers['Content-Length'])))
 		form = cgi.FieldStorage(
 			fp=self.rfile, 
 			headers=self.headers,
 			environ={'REQUEST_METHOD':'POST',
 			'CONTENT_TYPE':self.headers['Content-Type'],
 			})
-		#data.close()
-		self.send_response(200)
-		self.send_header("Content-type", "application/json")
 		try:
 			result = dispatcher.execute(form)
 		except ServerException as e:
 			print(e)
 			result = e.dumpJSON()
 		
-		#print("**************************************")
-		#print(result)
-		#print("**************************************")
 		result = str(result)
-		#self.send_response(200)
-		#self.send_header("Content-type", "application/json")
+		self.send_response(200)
+		self.send_header("Content-type", "application/json")
 		self.send_header("Content-Length", len(result))
 		self.end_headers()
 		self.wfile.write(result)
+		self.wfile.write("\n")
+		print("**************************************")
+		print(result)
+		print("**************************************")
 
 
 import socket
 address = ('', 8000)
 httpd = HTTPServer(address, RequestHandler)
-httpd.socket.setsockopt(socket.SOL_TCP, socket.TCP_NODELAY, 0)
+#httpd.socket.setsockopt(socket.SOL_TCP, socket.TCP_NODELAY, True)
 try:
 	httpd.serve_forever()
 except (Exception, KeyboardInterrupt) as e:
