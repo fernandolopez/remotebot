@@ -24,10 +24,10 @@ class Robot:
 	
 	def __parametros(self, *args):
 		print "Con los parámetros " + str(args)
+		time.sleep(1)
 
 	def __getattr__(self, name):
 		print "Se invoca en: " + str((self.board.device, self.id)) + " el método: " + name
-		time.sleep(1)
 		return self.__parametros
 
 	def getWheels(self):
