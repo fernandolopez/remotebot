@@ -1,3 +1,4 @@
+#-*- encoding: utf-8 -*-
 #~ remotebot, Python web server for remote interaction with duinobot API.
 #~ Copyright (C) 2012  Fernando E. M. López <flopez AT linti.unlp.edu.ar>
 #~ 

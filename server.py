@@ -1,4 +1,5 @@
 #!/usr/bin/python
+#-*- encoding: utf-8 -*-
 #~ remotebot, Python web server for remote interaction with duinobot API.
 #~ Copyright (C) 2012  Fernando E. M. López <flopez AT linti.unlp.edu.ar>
 #~ 
@@ -25,7 +26,7 @@ from errors import ServerException
 
 class RequestHandler(BaseHTTPRequestHandler):
 	defaultPage = "/clients/raw/javascript.html"
-	localAPK = "/clients/android/remotebot.apk"
+	localAPK = "/clients/android/ar.edu.unlp.linti.remotebot.apk"
 	# Disable logging DNS lookups
 	def address_string(self):
 		return str(self.client_address[0])
