@@ -93,7 +93,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 import socket
 address = ('', 8000)
 httpd = HTTPServer(address, RequestHandler)
-#httpd.socket.setsockopt(socket.SOL_TCP, socket.TCP_NODELAY, True)
+httpd.socket.setsockopt(socket.SOL_TCP, socket.TCP_NODELAY, True)
 try:
 	httpd.serve_forever()
 except (Exception, KeyboardInterrupt) as e:
