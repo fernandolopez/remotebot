@@ -3,6 +3,8 @@ remotebot
 
 Remote control for duinobot
 
+http://wiki.labmovil.linti.unlp.edu.ar/index.php?title=RemoteBot:_Android_%2B_Robots
+
 ## Descripción
 
 RemoteBot es una aplicación cliente servidor para controlar los robots del proyecto "Aprendiendo a programar con Python y robots" [1] utilizando dispositivos Android como controles remotos. El proyecto proporciona además un wrapper completo en Java del módulo Python que controla el robot de forma que el código en Java es reutilizable y fácilmente extendible para aprovechar las distintas funcionalidades del robot.
@@ -101,7 +103,7 @@ Los movimientos en la GUI se hacen de forma asincrónica y no se espera la respu
 
 El cliente incluye un wrapper completo en Java del módulo duinobot creado especialmente para la aplicación pero que fácilmente se puede adaptar para utilizar en otras aplicaciones Java, a continuación se muestra un ejemplo lado a lado de un script en Python con duinobot y su equivalente en Java utilizando esta API:
 
-![Remotebot y duinobot lado a lado](https://catedras.info.unlp.edu.ar/draftfile.php/499/user/draft/796243046/remotebot%20y%20duinobot%20lado%20a%20lado.png)
+![Remotebot y duinobot lado a lado](http://imageshack.us/a/img13/9748/remotebotyduinobotladoa.png)
 
 ## Arquitectura
 
@@ -109,25 +111,25 @@ El cliente incluye un wrapper completo en Java del módulo duinobot creado espec
 
 (los componentes en recuadros verdes son los desarrollados para este trabajo práctico)
 
-![Diagrama de subsistemas](https://catedras.info.unlp.edu.ar/draftfile.php/499/user/draft/796243046/diagrama%20subsistemas.png)
+![Diagrama de subsistemas](http://imageshack.us/a/img6/1617/diagramasubsistemas.png)
 
 ### Ilustración de una instalación típica
 
-![Ilustración de una instalación típica](https://catedras.info.unlp.edu.ar/draftfile.php/499/user/draft/796243046/instalacion%20tipica.png)
+![Ilustración de una instalación típica](http://imageshack.us/a/img689/4617/instalaciontipica.png)
 
 ## Screenshots de la aplicación
 
 Cliente Android, configuración de la conexión:
 
-![Pantalla de configuración de remotebot4Android](https://catedras.info.unlp.edu.ar/draftfile.php/499/user/draft/796243046/remotebot4Android%20configuraci%C3%B3n.png)
+![Pantalla de configuración de remotebot4Android](http://imageshack.us/a/img17/9309/remotebot4androidconfig.png)
 
 Cliente Android, pantalla de control:
 
-![Pantalla de control de remotebot4Android](https://catedras.info.unlp.edu.ar/draftfile.php/499/user/draft/796243046/remotebot4Android%20controles.png)
+![Pantalla de control de remotebot4Android](http://imageshack.us/a/img716/2451/remotebot4androidcontro.png)
 
 Cliente JavaScript empotrado en el servidor (principalmente usado para depurar al mismo):
 
-![Cliente Javascript incluido empotrado en el servidor](https://catedras.info.unlp.edu.ar/draftfile.php/499/user/draft/796243046/Remotebot%20JavaScript%20-%20normal.png)
+![Cliente Javascript incluido empotrado en el servidor](http://imageshack.us/a/img221/913/remotebotjavascriptnorm.png)
 
 En la última línea se puede ver que cada None retornado por alguna operación se codifica en JSON como null, y que en el último valor correspondiente al mensaje Robot.getLine() la tupla con los valores (44, 25) se convierte en una lista con esos 2 valores.
 
