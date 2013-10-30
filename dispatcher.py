@@ -15,8 +15,8 @@
 #~ You should have received a copy of the GNU General Public License
 #~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from duinobot import *
-#from mock.robot import *
+#from duinobot import *
+from mock.robot import *
 import json
 from errors import ServerException
 from serial.serialutil import SerialException

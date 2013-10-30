@@ -60,8 +60,18 @@ class RequestHandler(BaseHTTPRequestHandler):
 			self.send_response(500)
 		
 		self.send_header("Content-type", mimetype)
+		self.send_header("Access-Control-Allow-Origin", "*")
 		self.end_headers()			
 		self.wfile.write(str(body))
+
+	def do_OPTIONS(self):
+		self.send_response(200)
+		self.send_header("Access-Control-Allow-Origin", "*")
+       		self.send_header("Access-Control-Allow-Methods", 'POST, GET, OPTIONS')
+	        self.send_header('Access-Control-Max-Age', 1000)
+        	# note that '*' is not valid for Access-Control-Allow-Headers
+	        self.send_header('Access-Control-Allow-Headers', 'origin, x-csrftoken, content-type, accept')
+		self.end_headers()
 	
 	def do_POST(self):
 		if (self.command != 'POST'):
@@ -82,6 +92,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 		self.send_response(200)
 		self.send_header("Content-type", "application/json")
 		self.send_header("Content-Length", len(result))
+		self.send_header("Access-Control-Allow-Origin", "*")
 		self.end_headers()
 		self.wfile.write(result)
 		self.wfile.write("\n")
