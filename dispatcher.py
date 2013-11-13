@@ -17,9 +17,12 @@
 
 #from duinobot import *
 from mock.robot import *
+try:
+	from serial.serialutil import SerialException
+except ImportError:
+	class SerialException(Exception): pass
 import json
 from errors import ServerException
-from serial.serialutil import SerialException
 
 __robot = {}
 __board = {}
@@ -61,7 +64,7 @@ __handler = {
 
 def execute(form):
     returnList = []
-    print form
+    print(form)
     try:
         command = '\n'.join(form.getlist("commands"))
         cmdList = json.loads(command)

@@ -15,9 +15,10 @@
 #~ 
 #~ You should have received a copy of the GNU General Public License
 #~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-#from http.server import HTTPServer, BaseHTTPRequestHandler
-from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
+try:
+	from http.server import HTTPServer, BaseHTTPRequestHandler
+except ImportError:
+	from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 import cgi
 import json
 import dispatcher
@@ -67,12 +68,11 @@ class RequestHandler(BaseHTTPRequestHandler):
 	def do_OPTIONS(self):
 		self.send_response(200)
 		self.send_header("Access-Control-Allow-Origin", "*")
-       		self.send_header("Access-Control-Allow-Methods", 'POST, GET, OPTIONS')
-	        self.send_header('Access-Control-Max-Age', 1000)
-        	# note that '*' is not valid for Access-Control-Allow-Headers
-	        self.send_header('Access-Control-Allow-Headers', 'origin, x-csrftoken, content-type, accept')
+		self.send_header("Access-Control-Allow-Methods", 'POST, GET, OPTIONS')
+		self.send_header('Access-Control-Max-Age', 1000)
+		self.send_header('Access-Control-Allow-Headers', 'origin, x-csrftoken, content-type, accept')
 		self.end_headers()
-	
+		
 	def do_POST(self):
 		if (self.command != 'POST'):
 			return
