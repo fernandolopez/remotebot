@@ -23,11 +23,16 @@ import cgi
 import json
 import dispatcher
 import select
+from compat import RequestHandlerMixin
 from errors import ServerException
 
-class RequestHandler(BaseHTTPRequestHandler):
+class RequestHandler(RequestHandlerMixin, BaseHTTPRequestHandler):
 	defaultPage = "/clients/raw/javascript.html"
 	localAPK = "/clients/android/ar.edu.unlp.linti.remotebot.apk"
+	def __init__(self, *args, **kwargs):
+		RequestHandlerMixin.__init__(self)
+		BaseHTTPRequestHandler.__init__(self, *args, **kwargs)
+		
 	# Disable logging DNS lookups
 	def address_string(self):
 		return str(self.client_address[0])
@@ -63,7 +68,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 		self.send_header("Content-type", mimetype)
 		self.send_header("Access-Control-Allow-Origin", "*")
 		self.end_headers()			
-		self.wfile.write(str(body))
+		self.write(str(body))
 
 	def do_OPTIONS(self):
 		self.send_response(200)
@@ -94,8 +99,8 @@ class RequestHandler(BaseHTTPRequestHandler):
 		self.send_header("Content-Length", len(result))
 		self.send_header("Access-Control-Allow-Origin", "*")
 		self.end_headers()
-		self.wfile.write(result)
-		self.wfile.write("\n")
+		self.write(result)
+		self.write("\n")
 		print("**************************************")
 		print(result)
 		print("**************************************")
