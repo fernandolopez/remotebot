@@ -15,8 +15,8 @@
 #~ You should have received a copy of the GNU General Public License
 #~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#from duinobot import *
-from mock.robot import *
+from duinobot import *
+#from mock.robot import *
 try:
 	from serial.serialutil import SerialException
 except ImportError:
@@ -27,13 +27,17 @@ from errors import ServerException
 __robot = {}
 __board = {}
 
+MOVEMENTS = [ 'forward', 'backward', 'turnLeft', 'turnRight', 'motors' ]
 
 def robot_execute(message):
     boardid = message['board']['device']
+    boardid = '/dev/ttyUSB0'
     robotid = (boardid, message['id'])
     if message['command'] == '__init__':
         if boardid in __board and not robotid in __robot:
             __robot[robotid] = Robot(__board[boardid], message['id'])
+    elif message['command'] in MOVEMENTS and message['args'][0] < 20:
+        pass
     else:
         return getattr(__robot[robotid], message['command'])(*message['args'])
     return None
@@ -41,6 +45,7 @@ def robot_execute(message):
 def board_execute(message):
     device = message['board']['device'].strip()
     if message['command'] == '__init__':
+        device = '/dev/ttyUSB0'
         if not device in __board:
             __board[device] = Board(device)
     else:
