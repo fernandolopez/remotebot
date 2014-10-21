@@ -36,7 +36,7 @@ def robot_execute(message):
     if message['command'] == '__init__':
         if boardid in __board and not robotid in __robot:
             __robot[robotid] = Robot(__board[boardid], message['id'])
-    elif message['command'] in MOVEMENTS and message['args'][0] < 20:
+    elif message['command'] in MOVEMENTS and abs(message['args'][0]) < 20:
         pass
     else:
         return getattr(__robot[robotid], message['command'])(*message['args'])
@@ -48,6 +48,8 @@ def board_execute(message):
         device = '/dev/ttyUSB0'
         if not device in __board:
             __board[device] = Board(device)
+    elif message['command'] == 'report':
+        return [10, 12, 14, 16]
     else:
         return getattr(__board[device], message['command'])(*message['args'])
     return None
