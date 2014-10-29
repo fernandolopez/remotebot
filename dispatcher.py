@@ -49,7 +49,7 @@ def board_execute(message):
         if not device in __board:
             __board[device] = Board(device)
     elif message['command'] == 'report':
-        return [10, 12, 14, 16]
+        return [10, 12, 14, 16, 7]
     else:
         return getattr(__board[device], message['command'])(*message['args'])
     return None
